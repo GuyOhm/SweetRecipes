@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/recipe_details_item_tv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/details_list_item_height"
+        android:layout_marginBottom="@dimen/details_item_bottom_margin"
+        android:paddingRight="@dimen/details_item_horizontal_padding"
+        android:paddingLeft="@dimen/details_item_horizontal_padding"
+        android:gravity="center"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:textStyle="bold"
+        android:background="@android:color/white"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@android:color/holo_blue_dark"
+        tools:text="Recipe Introduction" />
+
+</FrameLayout>

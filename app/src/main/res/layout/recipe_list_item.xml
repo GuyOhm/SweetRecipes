@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recipe_item_cv"
+    android:layout_width="match_parent"
+    android:layout_height="160dp"
+    android:layout_marginBottom="16dp"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="5dp">
+
+    <ImageView
+        android:id="@+id/recipe_image_item_iv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@string/recipe_image_item_desc"
+        android:scaleType="centerInside"
+        android:layout_margin="20dp"
+        tools:src="@drawable/cup_cake" />
+
+    <TextView
+        android:id="@+id/recipe_name_item_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        tools:text="Super chocolate cookies" />
+
+</android.support.v7.widget.CardView>
