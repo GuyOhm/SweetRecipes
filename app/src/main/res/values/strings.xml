@@ -3,4 +3,9 @@
     <string name="recipe_image_item_desc">Image of a recipe list item</string>
     <string name="recipe_ingredients_label">Ingredients</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="previous_step_btn">previous</string>
+    <string name="next_step_btn">next</string>
+
 </resources>

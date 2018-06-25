@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.example.android.sweetrecipes.adapter.RecipeAdapter;
@@ -43,11 +43,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         mAdapter = new RecipeAdapter(this, mRecipes, this);
 
         // Create a layout manager
-        /*LinearLayoutManager layoutManager = new LinearLayoutManager(this,
-                LinearLayoutManager.VERTICAL, false);*/
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this,
+                LinearLayoutManager.VERTICAL, false);
 
-        GridLayoutManager layoutManager = new GridLayoutManager(this, R.integer.nb_of_colum_recipe_list,
-                GridLayoutManager.VERTICAL, false);
+        /*GridLayoutManager layoutManager = new GridLayoutManager(this, R.integer.nb_of_colum_recipe_list,
+                GridLayoutManager.VERTICAL, false);*/
 
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(layoutManager);

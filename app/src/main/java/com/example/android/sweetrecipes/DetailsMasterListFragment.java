@@ -26,21 +26,10 @@ import static com.example.android.sweetrecipes.MainActivity.RECIPE_EXTRA;
  * Activities that contain this fragment must implement the
  * {@link OnDetailClickListener} interface
  * to handle interaction events.
- * Use the {@link DetailsMasterListFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class DetailsMasterListFragment extends Fragment implements RecipeDetailsAdapter.RecipeDetailsAdapterListener{
 
     private static final String LOG_TAG = DetailsMasterListFragment.class.getSimpleName();
-
-/*    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;*/
 
     private OnDetailClickListener mListener;
 
@@ -48,32 +37,10 @@ public class DetailsMasterListFragment extends Fragment implements RecipeDetails
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param
-     * @param
-     * @return A new instance of fragment DetailsMasterListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DetailsMasterListFragment newInstance(/*String param1, String param2*/) {
-        DetailsMasterListFragment fragment = new DetailsMasterListFragment();
-/*        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);*/
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /*if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }*/
     }
 
     @Override
@@ -107,13 +74,6 @@ public class DetailsMasterListFragment extends Fragment implements RecipeDetails
         return rootView;
     }
 
-/*    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onDetailSelected(uri);
-        }
-    }*/
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -139,11 +99,12 @@ public class DetailsMasterListFragment extends Fragment implements RecipeDetails
     }
 
     @Override
-    public void onStepSelected(Step step) {
+    public void onStepSelected(List<Step> steps, int stepIndex) {
         if (mListener != null) {
-            mListener.onDetailStepSelected(step);
+            mListener.onDetailStepSelected(steps, stepIndex);
         }
     }
+
 
     /**
      * This interface must be implemented by activities that contain this
@@ -157,6 +118,6 @@ public class DetailsMasterListFragment extends Fragment implements RecipeDetails
      */
     public interface OnDetailClickListener {
         void onDetailIngredientSelected(List<Ingredient> ingredients);
-        void onDetailStepSelected(Step step);
+        void onDetailStepSelected(List<Step> steps, int stepIndex);
     }
 }

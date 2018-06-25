@@ -23,7 +23,7 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecipeDetailsAdap
 
     public interface RecipeDetailsAdapterListener {
         void onIngredientsSelected(List<Ingredient> ingredients);
-        void onStepSelected(Step step);
+        void onStepSelected(List<Step> steps, int stepIndex);
     }
 
     private RecipeDetailsAdapterListener mListener;
@@ -80,7 +80,7 @@ public class RecipeDetailsAdapter extends RecyclerView.Adapter<RecipeDetailsAdap
             if (position == 0) {
                 mListener.onIngredientsSelected(mIngredients);
             } else {
-                mListener.onStepSelected(mSteps.get(position - 1));
+                mListener.onStepSelected(mSteps, position - 1);
             }
         }
     }
