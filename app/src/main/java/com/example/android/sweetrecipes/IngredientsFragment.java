@@ -3,6 +3,8 @@ package com.example.android.sweetrecipes;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,7 +26,7 @@ import static com.example.android.sweetrecipes.RecipeDetailsActivity.INGREDIENTS
  */
 public class IngredientsFragment extends Fragment {
 
-    List<Ingredient> mIngredients = new ArrayList<>();
+    List<Ingredient> mIngredients;
     IngredientAdapter mAdapter;
     RecyclerView mRecyclerView;
 
@@ -34,22 +36,16 @@ public class IngredientsFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getActivity() != null && isAdded()) {
-            // check if I get the list<Ingredient>
-            mIngredients = extractIngredientsFromIntent();
-
-            if (mIngredients == null) {
-                getActivity().finish();
-            }
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        if (savedInstanceState != null){
+            mIngredients = savedInstanceState.getParcelableArrayList(INGREDIENTS_LIST_EXTRA);
+        } else {
+            if (mIngredients == null) {
+                mIngredients = extractIngredientsFromIntent();
+            }
+        }
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_ingredient, container, false);
 
@@ -72,4 +68,13 @@ public class IngredientsFragment extends Fragment {
         return null;
     }
 
+    public void setIngredients(List<Ingredient> ingredients){
+        this.mIngredients = ingredients;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(INGREDIENTS_LIST_EXTRA, (ArrayList<? extends Parcelable>) mIngredients);
+    }
 }

@@ -24,6 +24,16 @@
         <activity
             android:name=".StepActivity"
             android:configChanges="orientation|screenSize|screenLayout" />
+
+        <receiver android:name=".SweetRecipeWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/sweet_recipe_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

@@ -52,9 +52,10 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
     private static final String STEP_KEY = "step_key";
     private static final String STEPS_LIST_KEY = "steps_list_key";
     private static final String STEP_INDEX_KEY = "step_index_key";
+    private static final String IS_TWO_PANE_KEY = "is_two_pane_key";
 
     // Member variables
-    private List<Step> mSteps = new ArrayList<>();
+    private List<Step> mSteps;
     private int mStepIndex;
     private Step mStep;
     private TextView mDescription;
@@ -62,30 +63,27 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
     private SimpleExoPlayerView mPlayerView;
     private Button mPreviousStepButton;
     private Button mNextStepButton;
+    private boolean mTwoPane;
 
     public StepFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
 
         if (savedInstanceState != null) {
             mStep = savedInstanceState.getParcelable(STEP_KEY);
             mSteps = savedInstanceState.getParcelableArrayList(STEPS_LIST_KEY);
             mStepIndex = savedInstanceState.getInt(STEP_INDEX_KEY);
+            mTwoPane = savedInstanceState.getBoolean(IS_TWO_PANE_KEY);
         } else {
-            if (getActivity() != null && isAdded()) {
-                // check if we get the list<Ingredient> and initialize data
+            if (mSteps == null) {
+                // check if we get the list<Steps> and initialize data
                 initializeStepFromIntent();
             }
         }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_step, container, false);
 
@@ -115,31 +113,40 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
             }
         });
 
+        if (mTwoPane) {
+            hideButtons();
+        }
 
         return rootView;
     }
 
     private void initializeTextDescription() {
-        mDescription.setText(mStep.getDescription());
+        if (mStep != null) {
+            mDescription.setText(mStep.getDescription());
+        }
     }
 
     private void showNextStep() {
-        if (mStepIndex < mSteps.size()-1){
-            mStepIndex += 1;
-            mStep = mSteps.get(mStepIndex);
-            releasePlayer();
-            launchPlayer();
-            initializeTextDescription();
+        if (mSteps != null) {
+            if (mStepIndex < mSteps.size() - 1) {
+                mStepIndex += 1;
+                mStep = mSteps.get(mStepIndex);
+                releasePlayer();
+                launchPlayer();
+                initializeTextDescription();
+            }
         }
     }
 
     private void showPreviousStep() {
-        if (mStepIndex > 0){
-            mStepIndex -= 1;
-            mStep = mSteps.get(mStepIndex);
-            releasePlayer();
-            launchPlayer();
-            initializeTextDescription();
+        if (mSteps != null) {
+            if (mStepIndex > 0) {
+                mStepIndex -= 1;
+                mStep = mSteps.get(mStepIndex);
+                releasePlayer();
+                launchPlayer();
+                initializeTextDescription();
+            }
         }
     }
 
@@ -148,15 +155,17 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         mNextStepButton.setVisibility(View.VISIBLE);
     }
 
-    private void hideButtons(){
+    public void hideButtons(){
         mPreviousStepButton.setVisibility(View.GONE);
         mNextStepButton.setVisibility(View.GONE);
     }
 
     private void launchPlayer() {
-        if (mStep.getVideoURL() != null && !TextUtils.isEmpty(mStep.getVideoURL())) {
-            Uri mediaUri = Uri.parse(mStep.getVideoURL());
-            initializePlayer(mediaUri);
+        if (mStep != null) {
+            if (mStep.getVideoURL() != null && !TextUtils.isEmpty(mStep.getVideoURL())) {
+                Uri mediaUri = Uri.parse(mStep.getVideoURL());
+                initializePlayer(mediaUri);
+            }
         }
     }
 
@@ -258,6 +267,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         if (intent.hasExtra(STEPS_LIST_EXTRA) && intent.hasExtra(STEP_INDEX_EXTRA)) {
             mSteps = intent.getParcelableArrayListExtra(STEPS_LIST_EXTRA);
             mStepIndex = intent.getIntExtra(STEP_INDEX_EXTRA, 0);
+            mTwoPane = false;
         }
 
         if (mSteps != null) {
@@ -320,6 +330,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         outState.putParcelable(STEP_KEY, mStep);
         outState.putParcelableArrayList(STEPS_LIST_KEY, (ArrayList<? extends Parcelable>) mSteps);
         outState.putInt(STEP_INDEX_KEY, mStepIndex);
+        outState.putBoolean(IS_TWO_PANE_KEY, mTwoPane);
     }
 
     @Override
@@ -332,5 +343,23 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
     public void onResume() {
         super.onResume();
         launchPlayer();
+    }
+
+    public void setSteps(List<Step> steps) {
+        this.mSteps = steps;
+    }
+
+    public void setStepIndex(int stepIndex) {
+        this.mStepIndex = stepIndex;
+    }
+
+    public void setStep() {
+        if (mSteps != null) {
+            this.mStep = mSteps.get(mStepIndex);
+        }
+    }
+
+    public void setIsTwoPane(boolean isTwoPane) {
+        this.mTwoPane = isTwoPane;
     }
 }
