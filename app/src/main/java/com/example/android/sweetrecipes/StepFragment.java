@@ -9,6 +9,7 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,11 +54,16 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
     private static final String STEPS_LIST_KEY = "steps_list_key";
     private static final String STEP_INDEX_KEY = "step_index_key";
     private static final String IS_TWO_PANE_KEY = "is_two_pane_key";
+    private static final String PLAYER_POSITION_KEY = "player_position_key";
+    private static final String PLAYER_STATE_KEY = "get_player_state";
+    private static final String LOG_TAG = StepFragment.class.getSimpleName();
 
     // Member variables
     private List<Step> mSteps;
     private int mStepIndex;
     private Step mStep;
+    private Long mPlayerPosition;
+    private boolean mGetPlayerStateWhenReady;
     private TextView mDescription;
     private SimpleExoPlayer mExoPlayer;
     private SimpleExoPlayerView mPlayerView;
@@ -78,6 +84,9 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
             mSteps = savedInstanceState.getParcelableArrayList(STEPS_LIST_KEY);
             mStepIndex = savedInstanceState.getInt(STEP_INDEX_KEY);
             mTwoPane = savedInstanceState.getBoolean(IS_TWO_PANE_KEY);
+            mPlayerPosition = savedInstanceState.getLong(PLAYER_POSITION_KEY);
+            Log.d(LOG_TAG, ">>>>>>>>>> PLAYER POSITION IS: " + mPlayerPosition);
+            // mGetPlayerStateWhenReady = savedInstanceState.getBoolean(PLAYER_STATE_KEY);
         } else {
             if (mSteps == null) {
                 // check if we get the list<Steps> and initialize data
@@ -206,6 +215,7 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         super.onConfigurationChanged(newConfig);
 
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            mExoPlayer.setPlayWhenReady(false);
             mDescription.setVisibility(View.GONE);
             hideButtons();
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mPlayerView.getLayoutParams();
@@ -213,9 +223,8 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
             params.height = ViewGroup.LayoutParams.MATCH_PARENT;
             mPlayerView.setLayoutParams(params);
             hideSystemUI();
-            releasePlayer();
-            launchPlayer();
         } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mExoPlayer.setPlayWhenReady(false);
             mDescription.setVisibility(View.VISIBLE);
             showButtons();
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mPlayerView.getLayoutParams();
@@ -224,8 +233,6 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
             params.weight = 4;
             mPlayerView.setLayoutParams(params);
             showSystemUI();
-            releasePlayer();
-            launchPlayer();
         }
     }
 
@@ -294,7 +301,8 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-
+        Log.d(LOG_TAG, ">>>>>>>>>>>> playWhenReady: " + playWhenReady);
+        Log.d(LOG_TAG, ">>>>>>>>>>>> playbackState: " + playbackState);
     }
 
     @Override
@@ -331,18 +339,20 @@ public class StepFragment extends Fragment implements ExoPlayer.EventListener {
         outState.putParcelableArrayList(STEPS_LIST_KEY, (ArrayList<? extends Parcelable>) mSteps);
         outState.putInt(STEP_INDEX_KEY, mStepIndex);
         outState.putBoolean(IS_TWO_PANE_KEY, mTwoPane);
+        outState.putLong(PLAYER_POSITION_KEY, mExoPlayer.getCurrentPosition());
+        // outState.putBoolean(PLAYER_STATE_KEY, mExoPlayer.getPlayWhenReady());
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (mExoPlayer != null) releasePlayer();
+        if (mExoPlayer != null) mExoPlayer.setPlayWhenReady(false);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        launchPlayer();
+        if (mExoPlayer != null) mExoPlayer.setPlayWhenReady(true);
     }
 
     public void setSteps(List<Step> steps) {

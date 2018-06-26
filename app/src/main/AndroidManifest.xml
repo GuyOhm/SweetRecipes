@@ -27,7 +27,7 @@
             android:parentActivityName=".RecipeDetailsActivity" />
         <activity
             android:name=".StepActivity"
-            android:configChanges="orientation|screenSize|screenLayout"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:parentActivityName=".RecipeDetailsActivity" />
 
         <receiver android:name=".SweetRecipeWidget">
