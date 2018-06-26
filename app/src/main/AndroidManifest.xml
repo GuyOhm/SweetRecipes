@@ -19,11 +19,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RecipeDetailsActivity" />
-        <activity android:name=".IngredientsActivity" />
+        <activity
+            android:name=".RecipeDetailsActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".IngredientsActivity"
+            android:parentActivityName=".RecipeDetailsActivity" />
         <activity
             android:name=".StepActivity"
-            android:configChanges="orientation|screenSize|screenLayout" />
+            android:configChanges="orientation|screenSize|screenLayout"
+            android:parentActivityName=".RecipeDetailsActivity" />
 
         <receiver android:name=".SweetRecipeWidget">
             <intent-filter>
